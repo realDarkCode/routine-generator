@@ -5,9 +5,16 @@
   "repository": "git@github.com:realDarkCode/routine-generator.git",
   "author": "<tanzil.ncpsc@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
+  },
   "dependencies": {
     "@google-cloud/local-auth": "2.1.0",
     "google-auth-library": "^8.5.1",
     "googleapis": "105"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }
