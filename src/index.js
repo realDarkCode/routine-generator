@@ -1,14 +1,9 @@
 const authorize = require("./services/auth");
-const { google } = require("googleapis");
-const config = require("./config/spreadsheet.json");
-async function listMajors(auth) {
-  const sheets = google.sheets({ version: "v4", auth });
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: config.spreadsheet_id,
-    range: config.data_range,
-  });
-  const rows = res.data.values;
-  console.log(rows);
+const memberService = require("./services/member.service");
+async function run(auth) {
+  console.log("Logged in successfully");
+  const memberList = await memberService.getActiveMembers(null, auth);
+  console.log(memberList.length);
 }
 
-authorize().then(listMajors).catch(console.error);
+authorize().then(run).catch(console.error);
