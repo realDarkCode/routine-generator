@@ -1,8 +1,7 @@
-const { google } = require("googleapis");
 const fs = require("fs").promises;
 const path = require("path");
 const process = require("process");
-const config = require("../config/spreadsheet.json");
+const spreadsheetService = require("./spreadsheet.service");
 
 const MEMBER_LIST_PATH = path.join(
   process.cwd(),
@@ -23,19 +22,12 @@ const loadMemberListIfExits = async () => {
     return null;
   }
 };
-const getMemberList = async (auth) => {
+const getMemberList = async () => {
   const list = await loadMemberListIfExits();
   if (list) return list;
-
-  console.log("Fetching spreadsheet data");
-  const sheets = google.sheets({ version: "v4", auth });
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: config.spreadsheet_id,
-    range: config.data_range,
-  });
-  const rows = res.data.values;
+  const members = await spreadsheetService.getMemberListFromSheet();
+  const rows = members;
   const heading = rows.shift();
-  console.log(`Fetched ${rows.length} members data`);
   const memberListInObj = rows.reduce((store, row) => {
     let obj = {};
     row.map((colData, index) => {
