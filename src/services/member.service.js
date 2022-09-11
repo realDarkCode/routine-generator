@@ -40,8 +40,8 @@ const getMemberList = async () => {
   return memberListInObj;
 };
 
-const getActiveMembers = async (memberList, auth) => {
-  if (!memberList) memberList = await getMemberList(auth);
+const getActiveMembers = async (memberList) => {
+  if (!memberList) memberList = await getMemberList();
   return memberList.filter((member) => member["Status"] === "Active");
 };
 module.exports = {
