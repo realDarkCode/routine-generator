@@ -3,5 +3,6 @@ const routineService = require("./services/routine.service");
 
 (async () => {
   const memberList = await memberService.getActiveMembers();
-  routineService.generateRoutine(memberList);
+  const routine = routineService.generateRoutine(memberList);
+  console.log(routine);
 })();
