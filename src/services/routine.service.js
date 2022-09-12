@@ -1,6 +1,6 @@
 const memberService = require("./member.service");
 const getBlankRoutine = () => {
-  return new Array(5).fill([]);
+  return [[], [], [], [], []];
 };
 
 const deleteMemberFromArray = (memberList, memberId) => {
