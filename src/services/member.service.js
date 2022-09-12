@@ -39,7 +39,25 @@ const getMemberList = async () => {
   await saveMemberList(memberListInObj);
   return memberListInObj;
 };
-
+const getMemberByGender = (memberList) => {
+  const boysList = [];
+  const girlsList = [];
+  memberList.map((member) => {
+    let memberDetails = {
+      name: member.Name,
+      section: member.Section,
+      id: member.ID,
+    };
+    if (member["Gender"] === "Male") {
+      boysList.push(memberDetails);
+    } else if (member["Gender"] === "Female") {
+      girlsList.push(memberDetails);
+    } else {
+      console.log("Gender not specified");
+    }
+  });
+  return [boysList, girlsList];
+};
 const getActiveMembers = async (memberList) => {
   if (!memberList) memberList = await getMemberList();
   return memberList.filter((member) => member["Status"] === "Active");
@@ -47,4 +65,5 @@ const getActiveMembers = async (memberList) => {
 module.exports = {
   getMemberList,
   getActiveMembers,
+  getMemberByGender,
 };
