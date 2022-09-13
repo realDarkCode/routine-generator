@@ -45,6 +45,7 @@ const getMemberByGender = (memberList) => {
   memberList.map((member) => {
     let memberDetails = {
       name: member.Name,
+      short_name: member["Short Name"],
       section: member.Section,
       id: member.ID,
     };

@@ -15,4 +15,41 @@ const getMemberListFromSheet = async () => {
   return res.data.values;
 };
 
-module.exports = { getMemberListFromSheet };
+const updateRoutineToSheet = async (formattedRoutine = []) => {
+  console.log("Updating Routine...");
+  const auth = await authorize();
+  const sheets = google.sheets({ version: "v4", auth });
+  const response = await sheets.spreadsheets.values.update({
+    spreadsheetId: config.spreadsheet_id,
+    range: config.routine_data_range,
+    valueInputOption: "USER_ENTERED",
+    resource: {
+      values: formattedRoutine,
+    },
+  });
+  console.log(
+    `Updated ${response.data.updatedRows || 0} Rows, ${
+      response.data.updatedColumns || 0
+    } Columns, ${response.data.updatedCells || 0} Cells `
+  );
+};
+
+const FormatRoutineForSheet = (routine = []) => {
+  const formattedRoutine = [];
+  routine.map((day) =>
+    day.map((member) => {
+      formattedRoutine.push([
+        member.short_name,
+        member.id.slice(-3),
+        member.section,
+      ]);
+    })
+  );
+
+  return formattedRoutine;
+};
+module.exports = {
+  getMemberListFromSheet,
+  FormatRoutineForSheet,
+  updateRoutineToSheet,
+};
