@@ -48,8 +48,21 @@ const FormatRoutineForSheet = (routine = []) => {
 
   return formattedRoutine;
 };
+
+const getRoutineFromSheet = async () => {
+  const auth = await authorize();
+
+  console.log("Fetching routine data");
+  const sheets = google.sheets({ version: "v4", auth });
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: config.spreadsheet_id,
+    range: config.routine_data_range,
+  });
+  return res.data.values;
+};
 module.exports = {
   getMemberListFromSheet,
   FormatRoutineForSheet,
   updateRoutineToSheet,
+  getRoutineFromSheet,
 };
