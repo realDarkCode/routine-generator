@@ -9,7 +9,7 @@
 
 A simple routine generator for NCPSC Discipline Team.
 
-At first, It fetches Members list from google sheet and saves that locally. then generate 5 days (6 members each day) routine and update that routine into google sheet.
+At first, It fetches the Members list from the google sheet and saves that locally. then generate 5 day (6 members each day) routine and update that routine into the google sheet. then I just made some slight changes if I had to. lastly It fetches the updated routine and places this name into a template routine image
 
 ## Installation
 
