@@ -11,5 +11,7 @@ const routineImageService = require("./services/routineImage.service");
   // spreadsheetService.updateRoutineToSheet(formattedRoutine);
 
   let routine = await spreadsheetService.getRoutineFromSheet();
-  routineImageService.run(routine);
+  routineImageService.generateImage(routine, 1);
+  routineImageService.generateImage(routine, 2);
+  routineImageService.generateImage(routine, 3);
 })();

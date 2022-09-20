@@ -1,19 +1,6 @@
 const Jimp = require("jimp");
 const path = require("path");
 
-const TEMPLATE_IMAGE_PATH = path.join(
-  process.cwd(),
-  "src",
-  "templates",
-  "2.png"
-);
-const GENERATED_IMAGE_PATH = path.join(
-  process.cwd(),
-  "src",
-  "out",
-  `${new Date().toDateString()}.png`
-);
-
 const formatRoutine = (routine) => {
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
   const _routine = [...routine];
@@ -48,8 +35,19 @@ const getPositionInImage = (row, colum) => {
   return { nameX, nameY, idX, idY };
 };
 
-const drawTextOnImage = (data) => {};
-const run = async (routine) => {
+const generateImage = async (routine, routineNumber = 1) => {
+  const TEMPLATE_IMAGE_PATH = path.join(
+    process.cwd(),
+    "src",
+    "templates",
+    `${routineNumber}.png`
+  );
+  const GENERATED_IMAGE_PATH = path.join(
+    process.cwd(),
+    "src",
+    "out",
+    `${new Date().toDateString().replace(/ /g, "-")}-${routineNumber}.png`
+  );
   try {
     const routineWithTextPositions = formatRoutine(routine);
 
@@ -68,4 +66,4 @@ const run = async (routine) => {
   }
 };
 
-module.exports = { run };
+module.exports = { generateImage };
