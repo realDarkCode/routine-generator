@@ -3,3 +3,4 @@ credentials.json
 token.json
 src/data
 .vscode
+src/out
