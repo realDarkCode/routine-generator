@@ -41,3 +41,5 @@ At first, It fetches the Members list from the google sheet and saves that local
 
 - [googleapis](https://www.npmjs.com/package/googleapis) - for reading and updating data into google sheets.
 - [@google-cloud/local-auth](https://www.npmjs.com/package/@google-cloud/local-auth) - for authenticating with google.
+- [jimp](https://www.npmjs.com/package/jimp) - for writing text into image
+- [prompt-sync](https://www.npmjs.com/package/prompt-sync) - taking input from console
