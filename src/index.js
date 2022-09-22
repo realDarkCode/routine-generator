@@ -75,7 +75,8 @@ const clearCache = require("./utils/clearCache");
             const template = IOService.takeInputFromConsole(3);
             await routineImageService.generateImage(
               [...currentRoutine],
-              template
+              template,
+              { watermark: true }
             );
             console.log("Routine Generated ");
             continue;

@@ -35,7 +35,11 @@ const getPositionInImage = (row, colum) => {
   return { nameX, nameY, idX, idY };
 };
 
-const generateImage = async (routine, routineNumber = 1) => {
+const generateImage = async (routine, routineNumber = 1, options = {}) => {
+  const defaultOptions = {
+    watermark: false,
+    ...options,
+  };
   const TEMPLATE_IMAGE_PATH = path.join(
     process.cwd(),
     "src",
@@ -54,12 +58,22 @@ const generateImage = async (routine, routineNumber = 1) => {
     const image = await Jimp.read(TEMPLATE_IMAGE_PATH);
     const font = await Jimp.loadFont(Jimp.FONT_SANS_12_BLACK);
 
+    const waterMarkFont = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
     Object.keys(routineWithTextPositions).map((day) => {
       routineWithTextPositions[day].map((member) => {
         image.print(font, member.nameX, member.nameY, member.name);
         image.print(font, member.idX, member.idY, member.id);
       });
     });
+
+    if (defaultOptions?.watermark) {
+      image.print(
+        waterMarkFont,
+        395,
+        465,
+        "generated with realDarkCode/routine-generator"
+      );
+    }
     await image.writeAsync(GENERATED_IMAGE_PATH);
   } catch (error) {
     console.log(error);
