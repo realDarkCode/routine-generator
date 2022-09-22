@@ -10,7 +10,7 @@ const clearCache = require("./utils/clearCache");
     let input = IOService.takeInputFromConsole(3);
     const memberList = await memberService.getMemberList();
     const activeMemberList = memberService.getActiveMembers(memberList);
-    const currentRoutine = await spreadsheetService.getRoutineFromSheet();
+    let currentRoutine;
     switch (input) {
       case 1: // Member
         IOService.showMemberMenu();
@@ -36,6 +36,7 @@ const clearCache = require("./utils/clearCache");
       case 2: // routine
         IOService.showRoutineMenu();
         input = IOService.takeInputFromConsole(3);
+        currentRoutine = await spreadsheetService.getRoutineFromSheet();
         switch (input) {
           case 1: // Show current routine
             console.table(
@@ -66,6 +67,7 @@ const clearCache = require("./utils/clearCache");
             await spreadsheetService.updateRoutineToSheet(formattedRoutine);
             continue;
           case 3: // generate image from current routine
+            currentRoutine = await spreadsheetService.getRoutineFromSheet();
             console.clear();
             console.log("-------------Current Routine--------------");
             console.table(
@@ -73,18 +75,18 @@ const clearCache = require("./utils/clearCache");
             );
             console.log("Select template 1-3");
             const template = IOService.takeInputFromConsole(3);
-            await routineImageService.generateImage(
+            const generatedPath = await routineImageService.generateImage(
               [...currentRoutine],
               template,
               { watermark: true }
             );
-            console.log("Routine Generated ");
+            console.log("Routine Generated in", generatedPath);
             continue;
         }
         break;
       case 3: // clear cache
         clearCache();
-        break;
+        continue;
       default:
         console.log({ input });
         throw new Error("Invalid Choice");

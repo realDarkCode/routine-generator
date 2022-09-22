@@ -49,7 +49,7 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
   const GENERATED_IMAGE_PATH = path.join(
     process.cwd(),
     "src",
-    "out",
+    "generated_routines",
     `${new Date().toDateString().replace(/ /g, "-")}-${routineNumber}.png`
   );
   try {
@@ -75,6 +75,7 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
       );
     }
     await image.writeAsync(GENERATED_IMAGE_PATH);
+    return GENERATED_IMAGE_PATH;
   } catch (error) {
     console.log(error);
   }
