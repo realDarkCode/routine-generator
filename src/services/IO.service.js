@@ -10,6 +10,7 @@ const showHomeMenu = () => {
 };
 
 const showMemberMenu = () => {
+  console.clear();
   console.log("-------Duty Schedule Generator----------");
   console.log("-------Member Menu----------");
   console.log("1. Show All Member List");
@@ -19,6 +20,7 @@ const showMemberMenu = () => {
 };
 
 const showRoutineMenu = () => {
+  console.clear();
   console.log("-------Duty Schedule Generator----------");
   console.log("-------Routine Menu----------");
   console.log("1. Show Current Routine");

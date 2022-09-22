@@ -58,4 +58,23 @@ const generateRoutine = (memberList) => {
   return routine;
 };
 
-module.exports = { generateRoutine };
+const formatSpreadsheetRoutine = (routine) => {
+  const days = ["Sunday", "Monday", "Tuesday", "WednesDay", "Thursday"];
+
+  return days.reduce((store, currentDay) => {
+    const currentDayMembers = routine.splice(0, 6);
+    currentDayMembers.map((member) =>
+      store.push({
+        day: currentDay,
+        name: member[0],
+        id: member[1],
+        section: member[2],
+      })
+    );
+    return store;
+  }, []);
+};
+module.exports = {
+  generateRoutine,
+  formatSpreadsheetRoutine,
+};

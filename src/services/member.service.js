@@ -39,11 +39,11 @@ const getMemberList = async () => {
   await saveMemberList(memberListInObj);
   return memberListInObj;
 };
-const getMemberByGender = async (memberList, options) => {
-  if (!memberList) memberList = await getMemberList();
+const getMemberByGender = (memberList, options = {}) => {
+  if (!memberList) throw new Error("Please Provide Member List");
   const boysList = [];
   const girlsList = [];
-  if (options?.activeOnly) memberList = await getActiveMembers(memberList);
+  if (options?.activeOnly) memberList = getActiveMembers(memberList);
   memberList.map((member) => {
     let memberDetails = {
       name: member.Name,
@@ -61,8 +61,9 @@ const getMemberByGender = async (memberList, options) => {
   });
   return [boysList, girlsList];
 };
-const getActiveMembers = async (memberList) => {
-  if (!memberList) memberList = await getMemberList();
+const getActiveMembers = (memberList) => {
+  if (!memberList) throw new Error("Please Provide Member List");
+
   return memberList.filter((member) => member["Status"] === "Active");
 };
 module.exports = {
