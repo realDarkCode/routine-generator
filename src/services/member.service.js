@@ -39,9 +39,11 @@ const getMemberList = async () => {
   await saveMemberList(memberListInObj);
   return memberListInObj;
 };
-const getMemberByGender = (memberList) => {
+const getMemberByGender = async (memberList, options) => {
+  if (!memberList) memberList = await getMemberList();
   const boysList = [];
   const girlsList = [];
+  if (options?.activeOnly) memberList = await getActiveMembers(memberList);
   memberList.map((member) => {
     let memberDetails = {
       name: member.Name,
