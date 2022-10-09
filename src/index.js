@@ -35,15 +35,27 @@ const clearCache = require("./utils/clearCache");
         break;
       case 2: // routine
         IOService.showRoutineMenu();
-        input = IOService.takeInputFromConsole(3);
+        input = IOService.takeInputFromConsole(4);
         currentRoutine = await spreadsheetService.getRoutineFromSheet();
         switch (input) {
-          case 1: // Show current routine
+          case 1: {
+            // Show current routine
             console.table(
               routineService.formatSpreadsheetRoutine([...currentRoutine])
             );
             continue;
-          case 2: // generate routine
+          }
+          case 2: {
+            const verifiedRoutine = routineService.verifyRoutine(
+              currentRoutine,
+              activeMemberList
+            );
+            console.table(verifiedRoutine);
+            continue;
+          }
+
+          case 3: {
+            // generate routine
             let newRoutine = routineService.generateRoutine([
               ...activeMemberList,
             ]);
@@ -62,11 +74,14 @@ const clearCache = require("./utils/clearCache");
                 ...activeMemberList,
               ]);
             }
+
             const formattedRoutine =
               spreadsheetService.FormatRoutineForSheet(newRoutine);
             await spreadsheetService.updateRoutineToSheet(formattedRoutine);
             continue;
-          case 3: // generate image from current routine
+          }
+          case 4: {
+            // generate image from current routine
             currentRoutine = await spreadsheetService.getRoutineFromSheet();
             console.clear();
             console.log("-------------Current Routine--------------");
@@ -82,6 +97,7 @@ const clearCache = require("./utils/clearCache");
             );
             console.log("Routine Generated in", generatedPath);
             continue;
+          }
         }
         break;
       case 3: // clear cache

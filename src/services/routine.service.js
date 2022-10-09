@@ -74,7 +74,27 @@ const formatSpreadsheetRoutine = (routine) => {
     return store;
   }, []);
 };
+const verifyRoutine = (spreadSheetRoutine, activeMemberList) => {
+  spreadSheetRoutine = formatSpreadsheetRoutine(spreadSheetRoutine);
+  const result = activeMemberList.reduce((acc, curr) => {
+    const member = {};
+    member.name = curr["Short Name"];
+    member.id = curr["ID"].slice(-3);
+    member.section = curr["Section"];
+    const dutyDay = spreadSheetRoutine
+      .reduce((acc, curr) => {
+        if (curr.id === member.id) acc.push(curr.day);
+        return acc;
+      }, [])
+      .join(", ");
+    member.day = dutyDay;
+    acc.push(member);
+    return acc;
+  }, []);
+  return result;
+};
 module.exports = {
   generateRoutine,
   formatSpreadsheetRoutine,
+  verifyRoutine,
 };

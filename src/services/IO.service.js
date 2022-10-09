@@ -24,8 +24,9 @@ const showRoutineMenu = () => {
   console.log("-------Duty Schedule Generator----------");
   console.log("-------Routine Menu----------");
   console.log("1. Show Current Routine");
-  console.log("2. Generate new Routine");
-  console.log("3. Generate Image from current Routine");
+  console.log("2. Verify routine");
+  console.log("3. Generate new Routine");
+  console.log("4. Generate Image from current Routine");
   console.log("0. Exit");
 };
 
