@@ -94,10 +94,13 @@ makeDirIfNotExists("./src/data");
             );
             console.log("Select template 1-3");
             const template = IOService.takeInputFromConsole(3);
+            const days = IOService.takeRawInput(
+              "Select Days: (1-5) [space separated]: "
+            );
             const generatedPath = await routineImageService.generateImage(
               [...currentRoutine],
               template,
-              { watermark: true }
+              { watermark: true, days }
             );
             console.log("Routine Generated in", generatedPath);
             continue;

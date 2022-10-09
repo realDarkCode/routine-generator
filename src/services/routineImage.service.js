@@ -35,13 +35,33 @@ const getPositionInImage = (row, colum) => {
   return { nameX, nameY, idX, idY };
 };
 
+const formatInputDays = (days) => {
+  const allDays = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
+  const result = [];
+
+  if (typeof days !== "string") return [];
+  if (days.length === 0) return [];
+  days = days.split(" ");
+  days.forEach((day) => {
+    const dayInNum = parseInt(day);
+    if (dayInNum < 1 && dayInNum > 5) return;
+    result.push(allDays[dayInNum - 1]);
+  });
+  return result;
+};
+
 const generateImage = async (routine, routineNumber = 1, options = {}) => {
+  const allDays = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
+
   const _options = {
     watermark: false,
-    // days: ["sunday", "monday", "tuesday", "wednesday", "thursday"],
-    days: ["tuesday", "wednesday", "thursday"],
     ...options,
   };
+
+  const userDays = formatInputDays(options.days);
+  const DAYS = userDays.length === 0 ? allDays : userDays;
+
+  console.log({ DAYS, userDays, allDays });
   const TEMPLATE_IMAGE_PATH = path.join(
     process.cwd(),
     "src",
@@ -54,6 +74,7 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
     "routines",
     `${new Date().toDateString().replace(/ /g, "-")}-${routineNumber}.png`
   );
+
   try {
     const routineWithTextPositions = formatRoutine(routine);
 
@@ -61,7 +82,7 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
     const font = await Jimp.loadFont(Jimp.FONT_SANS_12_BLACK);
 
     const waterMarkFont = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
-    _options.days.map((day) => {
+    DAYS.map((day) => {
       routineWithTextPositions[day].map((member) => {
         image.print(font, member.nameX, member.nameY, member.name);
         image.print(font, member.idX, member.idY, member.id);

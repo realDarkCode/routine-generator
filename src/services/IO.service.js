@@ -39,9 +39,13 @@ const takeInputFromConsole = (highestOption = 3) => {
     console.log("Invalid Input!");
   }
 };
+const takeRawInput = (text) => {
+  return prompt(text);
+};
 module.exports = {
   showHomeMenu,
   showMemberMenu,
   showRoutineMenu,
   takeInputFromConsole,
+  takeRawInput,
 };
