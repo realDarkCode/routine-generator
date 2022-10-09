@@ -36,8 +36,10 @@ const getPositionInImage = (row, colum) => {
 };
 
 const generateImage = async (routine, routineNumber = 1, options = {}) => {
-  const defaultOptions = {
+  const _options = {
     watermark: false,
+    // days: ["sunday", "monday", "tuesday", "wednesday", "thursday"],
+    days: ["tuesday", "wednesday", "thursday"],
     ...options,
   };
   const TEMPLATE_IMAGE_PATH = path.join(
@@ -49,7 +51,7 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
   const GENERATED_IMAGE_PATH = path.join(
     process.cwd(),
     "src",
-    "generated_routines",
+    "routines",
     `${new Date().toDateString().replace(/ /g, "-")}-${routineNumber}.png`
   );
   try {
@@ -59,14 +61,14 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
     const font = await Jimp.loadFont(Jimp.FONT_SANS_12_BLACK);
 
     const waterMarkFont = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
-    Object.keys(routineWithTextPositions).map((day) => {
+    _options.days.map((day) => {
       routineWithTextPositions[day].map((member) => {
         image.print(font, member.nameX, member.nameY, member.name);
         image.print(font, member.idX, member.idY, member.id);
       });
     });
 
-    if (defaultOptions?.watermark) {
+    if (_options?.watermark) {
       image.print(
         waterMarkFont,
         395,

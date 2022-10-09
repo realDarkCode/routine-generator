@@ -9,4 +9,11 @@ const deleteFile = (path) => {
   }
 };
 
-module.exports = { deleteFile };
+const makeDirIfNotExists = (PATH) => {
+  try {
+    if (!fs.existsSync(PATH)) fs.mkdirSync(PATH, { recursive: true });
+  } catch (err) {
+    console.log(err);
+  }
+};
+module.exports = { deleteFile, makeDirIfNotExists };

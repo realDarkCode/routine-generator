@@ -4,6 +4,10 @@ const spreadsheetService = require("./services/spreadsheet.service");
 const routineImageService = require("./services/routineImage.service");
 const IOService = require("./services/IO.service");
 const clearCache = require("./utils/clearCache");
+
+const { makeDirIfNotExists } = require("./utils/util");
+
+makeDirIfNotExists("./src/data");
 (async () => {
   while (true) {
     IOService.showHomeMenu();

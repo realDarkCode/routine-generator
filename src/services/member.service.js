@@ -2,7 +2,6 @@ const fs = require("fs").promises;
 const path = require("path");
 const process = require("process");
 const spreadsheetService = require("./spreadsheet.service");
-
 const MEMBER_LIST_PATH = path.join(
   process.cwd(),
   "src",
