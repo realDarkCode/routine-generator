@@ -61,7 +61,6 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
   const userDays = formatInputDays(options.days);
   const DAYS = userDays.length === 0 ? allDays : userDays;
 
-  console.log({ DAYS, userDays, allDays });
   const TEMPLATE_IMAGE_PATH = path.join(
     process.cwd(),
     "src",
