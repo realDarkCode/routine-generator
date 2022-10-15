@@ -1,7 +1,7 @@
 {
   "name": "routine-generator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/index.js",
   "repository": "git@github.com:realDarkCode/routine-generator.git",
   "author": "<tanzil.ncpsc@gmail.com>",
   "license": "MIT",
