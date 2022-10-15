@@ -51,6 +51,9 @@ const generateRoutine = (memberList) => {
         routine[i][j] = boy;
       } else {
         let girl = getRandomMember(girls);
+        if (!girl) {
+          girl = getExtraMember(routine[i], girlsList);
+        }
         routine[i][j] = girl;
       }
     }
