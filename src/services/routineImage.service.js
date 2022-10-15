@@ -5,8 +5,14 @@ const formatRoutine = (routine) => {
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
   const _routine = [...routine];
   const MEMBER_PER_DAY = 6;
+
   return days.reduce((store, currentDay, dayIndex) => {
     let currentDayMembers = _routine.splice(0, MEMBER_PER_DAY);
+    currentDayMembers.sort(([aName], [bName]) => {
+      if (aName < bName) return -1;
+      else if (aName > bName) return 1;
+      else return 0;
+    });
     store[currentDay] = [];
     currentDayMembers.map((member, memberIndex) => {
       store[currentDay][memberIndex] = {
@@ -15,7 +21,6 @@ const formatRoutine = (routine) => {
         ...getPositionInImage(dayIndex, memberIndex),
       };
     });
-
     return store;
   }, []);
 };
@@ -79,7 +84,6 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
 
     const image = await Jimp.read(TEMPLATE_IMAGE_PATH);
     const font = await Jimp.loadFont(Jimp.FONT_SANS_12_BLACK);
-
     const waterMarkFont = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
     DAYS.map((day) => {
       routineWithTextPositions[day].map((member) => {
@@ -103,4 +107,4 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
   }
 };
 
-module.exports = { generateImage };
+module.exports = { generateImage, formatRoutine };
