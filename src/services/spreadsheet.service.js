@@ -38,6 +38,7 @@ const FormatRoutineForSheet = (routine = []) => {
   const formattedRoutine = [];
   routine.map((day) =>
     day.map((member) => {
+      console.log(member)
       formattedRoutine.push([
         member.short_name,
         member.id.slice(-3),

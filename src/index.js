@@ -86,7 +86,6 @@ makeDirIfNotExists("./src/data");
           }
           case 4: {
             // generate image from current routine
-            currentRoutine = await spreadsheetService.getRoutineFromSheet();
             console.clear();
             console.log("-------------Current Routine--------------");
             console.table(

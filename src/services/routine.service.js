@@ -1,6 +1,7 @@
 const memberService = require("./member.service");
 const config = require("../config/member.json");
 const { isSameObject } = require("../utils/objectMethod");
+const routineConfig = require("../config/routine.json");
 const getBlankRoutine = () => {
   return [[], [], [], [], []];
 };
@@ -41,9 +42,10 @@ const generateRoutine = (memberList) => {
   const routine = getBlankRoutine();
   const boys = [...boysList];
   const girls = [...girlsList];
+  const memberPerDay = routineConfig.memberPerDay || 5;
   for (let i = 0; i < 5; i++) {
-    for (let j = 0; j < 6; j++) {
-      if (j < 3) {
+    for (let j = 0; j < memberPerDay; j++) {
+      if (j < memberPerDay / 2) {
         let boy = getRandomMember(boys);
         if (!boy) {
           boy = getExtraMember(routine[i], boysList);
@@ -62,7 +64,7 @@ const generateRoutine = (memberList) => {
 };
 
 const formatSpreadsheetRoutine = (routine) => {
-  const days = ["Sunday", "Monday", "Tuesday", "WednesDay", "Thursday"];
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 
   return days.reduce((store, currentDay) => {
     const currentDayMembers = routine.splice(0, 6);
