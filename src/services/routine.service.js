@@ -42,7 +42,7 @@ const generateRoutine = (memberList) => {
   const routine = getBlankRoutine();
   const boys = [...boysList];
   const girls = [...girlsList];
-  const memberPerDay = routineConfig.memberPerDay || 5;
+  const memberPerDay = routineConfig.memberPerDay || 6;
   for (let i = 0; i < 5; i++) {
     for (let j = 0; j < memberPerDay; j++) {
       if (j < memberPerDay / 2) {
@@ -67,7 +67,10 @@ const formatSpreadsheetRoutine = (routine) => {
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 
   return days.reduce((store, currentDay) => {
-    const currentDayMembers = routine.splice(0, 6);
+    const currentDayMembers = routine.splice(
+      0,
+      routineConfig.memberPerDay || 6
+    );
     currentDayMembers.map((member) =>
       store.push({
         day: currentDay,
