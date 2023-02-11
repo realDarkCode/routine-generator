@@ -9,7 +9,7 @@ const getBlankRoutine = () => {
 const deleteMemberFromList = (memberList, memberId) => {
   let memberAtIndex;
   memberList.find((member, index) => {
-    if (member["ID"] === memberId) {
+    if (member["ID"] === memberId || member.id === memberId) {
       memberAtIndex = index;
       return;
     }
@@ -37,27 +37,40 @@ const getExtraMember = (dayRoutine = [], list = []) => {
 };
 const generateRoutine = (memberList) => {
   const excludeList = config.exclude || [];
+  const regularDutyMembersId = config.dailyDuty || [];
+  excludeList.push(...regularDutyMembersId);
+  const dailyDutyMembers = memberService.getMembersById(
+    regularDutyMembersId,
+    memberList
+  );
   excludeList.map((id) => deleteMemberFromList(memberList, id));
-  const [boysList, girlsList] = memberService.getMemberByGender(memberList);
+  let [boysList, girlsList] = memberService.getMemberByGender(memberList);
   const routine = getBlankRoutine();
   const boys = [...boysList];
   const girls = [...girlsList];
-  const memberPerDay = routineConfig.memberPerDay || 5;
+  const memberPerDay = routineConfig.memberPerDay || 6;
+  let member;
   for (let i = 0; i < 5; i++) {
     for (let j = 0; j < memberPerDay; j++) {
-      if (j < memberPerDay / 2) {
-        let boy = getRandomMember(boys);
-        if (!boy) {
-          boy = getExtraMember(routine[i], boysList);
-        }
-        routine[i][j] = boy;
-      } else {
-        let girl = getRandomMember(girls);
-        if (!girl) {
-          girl = getExtraMember(routine[i], girlsList);
-        }
-        routine[i][j] = girl;
+      if (dailyDutyMembers[j]) {
+        routine[i][j] = dailyDutyMembers[j];
+        continue;
       }
+      if (boysList.length === 0)
+        boysList = memberService.getMemberByGender(memberList, {
+          maleOnly: true,
+        });
+      if (girlsList.length === 0)
+        girlsList = memberService.getMemberByGender(memberList, {
+          femaleOnly: true,
+        });
+      if (routine[i].length <= memberPerDay / 2) {
+        member = getRandomMember(boys) || getExtraMember(routine[i], boysList);
+      } else {
+        member =
+          getRandomMember(girls) || getExtraMember(routine[i], girlsList);
+      }
+      routine[i][j] = member;
     }
   }
   return routine;
@@ -67,7 +80,10 @@ const formatSpreadsheetRoutine = (routine) => {
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
 
   return days.reduce((store, currentDay) => {
-    const currentDayMembers = routine.splice(0, 6);
+    const currentDayMembers = routine.splice(
+      0,
+      routineConfig.memberPerDay || 6
+    );
     currentDayMembers.map((member) =>
       store.push({
         day: currentDay,

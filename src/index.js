@@ -99,7 +99,7 @@ makeDirIfNotExists("./src/data");
             const generatedPath = await routineImageService.generateImage(
               [...currentRoutine],
               template,
-              { watermark: true, days }
+              { watermark: false, days }
             );
             console.log("Routine Generated in", generatedPath);
             continue;
