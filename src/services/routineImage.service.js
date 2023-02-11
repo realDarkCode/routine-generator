@@ -21,7 +21,7 @@ const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
       }
       store[currentDay][memberIndex] = {
         name: member[0],
-        id: `(${member[1]})`,
+        id: `${member[2].charAt(0)}-${member[1]}`,
         ...positions,
       };
     });
@@ -39,7 +39,7 @@ const gapBetweenNameAndID = 70;
 const getPositionInImage = (row, colum) => {
   const nameX = statingX + gapBetweenColum * colum;
   const nameY = startingY + gapBetweenRow * row;
-  const idX = nameX + 3;
+  const idX = nameX - 3;
   const idY = nameY + gapBetweenNameAndID;
   return { nameX, nameY, idX, idY };
 };
