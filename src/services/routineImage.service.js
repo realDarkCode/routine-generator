@@ -14,7 +14,7 @@ const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
     store[currentDay] = [];
     currentDayMembers.map((member, memberIndex) => {
       let positions;
-      if (landscape) {
+      if (!landscape) {
         positions = getPositionInImage(memberIndex, dayIndex);
       } else {
         positions = getPositionInImage(dayIndex, memberIndex);
@@ -30,11 +30,11 @@ const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
 };
 
 // Positions based on image
-const statingX = 58;
-const startingY = 257;
-const gapBetweenColum = 136;
-const gapBetweenRow = 81;
-const gapBetweenNameAndID = 18;
+const statingX = 240;
+const startingY = 960;
+const gapBetweenColum = 498;
+const gapBetweenRow = 308;
+const gapBetweenNameAndID = 70;
 
 const getPositionInImage = (row, colum) => {
   const nameX = statingX + gapBetweenColum * colum;
@@ -93,7 +93,7 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
     );
 
     const image = await Jimp.read(TEMPLATE_IMAGE_PATH);
-    const font = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+    const font = await Jimp.loadFont(Jimp.FONT_SANS_64_BLACK);
     const waterMarkFont = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
     DAYS.map((day) => {
       routineWithTextPositions[day].map((member) => {

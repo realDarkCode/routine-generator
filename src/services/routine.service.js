@@ -38,26 +38,29 @@ const getExtraMember = (dayRoutine = [], list = []) => {
 const generateRoutine = (memberList) => {
   const excludeList = config.exclude || [];
   excludeList.map((id) => deleteMemberFromList(memberList, id));
-  const [boysList, girlsList] = memberService.getMemberByGender(memberList);
+  let [boysList, girlsList] = memberService.getMemberByGender(memberList);
   const routine = getBlankRoutine();
   const boys = [...boysList];
   const girls = [...girlsList];
   const memberPerDay = routineConfig.memberPerDay || 6;
+  let member;
   for (let i = 0; i < 5; i++) {
     for (let j = 0; j < memberPerDay; j++) {
+      if (boysList.length === 0)
+        boysList = memberService.getMemberByGender(memberList, {
+          maleOnly: true,
+        });
+      if (girlsList.length === 0)
+        girlsList = memberService.getMemberByGender(memberList, {
+          femaleOnly: true,
+        });
       if (j < memberPerDay / 2) {
-        let boy = getRandomMember(boys);
-        if (!boy) {
-          boy = getExtraMember(routine[i], boysList);
-        }
-        routine[i][j] = boy;
+        member = getRandomMember(boys) || getExtraMember(routine[i], boysList);
       } else {
-        let girl = getRandomMember(girls);
-        if (!girl) {
-          girl = getExtraMember(routine[i], girlsList);
-        }
-        routine[i][j] = girl;
+        member =
+          getRandomMember(girls) || getExtraMember(routine[i], girlsList);
       }
+      routine[i][j] = member;
     }
   }
   return routine;

@@ -42,7 +42,15 @@ const getMemberByGender = (memberList, options = {}) => {
   if (!memberList) throw new Error("Please Provide Member List");
   const boysList = [];
   const girlsList = [];
-  if (options?.activeOnly) memberList = getActiveMembers(memberList);
+  const _options = Object.assign(
+    {
+      activeOnly: false,
+      maleOnly: false,
+      femaleOnly: false,
+    },
+    options
+  );
+  if (_options?.activeOnly) memberList = getActiveMembers(memberList);
   memberList.map((member) => {
     let memberDetails = {
       name: member.Name,
@@ -58,6 +66,8 @@ const getMemberByGender = (memberList, options = {}) => {
       console.log("Gender not specified");
     }
   });
+  if (_options.maleOnly) return boysList;
+  else if (_options.femaleOnly) return girlsList;
   return [boysList, girlsList];
 };
 const getActiveMembers = (memberList) => {
