@@ -9,7 +9,7 @@ const getBlankRoutine = () => {
 const deleteMemberFromList = (memberList, memberId) => {
   let memberAtIndex;
   memberList.find((member, index) => {
-    if (member["ID"] === memberId) {
+    if (member["ID"] === memberId || member.id === memberId) {
       memberAtIndex = index;
       return;
     }
@@ -37,6 +37,12 @@ const getExtraMember = (dayRoutine = [], list = []) => {
 };
 const generateRoutine = (memberList) => {
   const excludeList = config.exclude || [];
+  const regularDutyMembersId = config.dailyDuty || [];
+  excludeList.push(...regularDutyMembersId);
+  const dailyDutyMembers = memberService.getMembersById(
+    regularDutyMembersId,
+    memberList
+  );
   excludeList.map((id) => deleteMemberFromList(memberList, id));
   let [boysList, girlsList] = memberService.getMemberByGender(memberList);
   const routine = getBlankRoutine();
@@ -46,6 +52,10 @@ const generateRoutine = (memberList) => {
   let member;
   for (let i = 0; i < 5; i++) {
     for (let j = 0; j < memberPerDay; j++) {
+      if (dailyDutyMembers[j]) {
+        routine[i][j] = dailyDutyMembers[j];
+        continue;
+      }
       if (boysList.length === 0)
         boysList = memberService.getMemberByGender(memberList, {
           maleOnly: true,
@@ -54,7 +64,7 @@ const generateRoutine = (memberList) => {
         girlsList = memberService.getMemberByGender(memberList, {
           femaleOnly: true,
         });
-      if (j < memberPerDay / 2) {
+      if (routine[i].length <= memberPerDay / 2) {
         member = getRandomMember(boys) || getExtraMember(routine[i], boysList);
       } else {
         member =

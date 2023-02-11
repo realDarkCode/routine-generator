@@ -75,8 +75,23 @@ const getActiveMembers = (memberList) => {
 
   return memberList.filter((member) => member["Status"] === "Active");
 };
+
+const getMembersById = (ids = [], memberList = []) => {
+  return memberList.reduce((store, member) => {
+    let memberDetails = {
+      name: member.Name,
+      short_name: member["Short Name"],
+      section: member.Section,
+      id: member.ID,
+    };
+
+    if (ids.includes(memberDetails.id)) store.push(memberDetails);
+    return store;
+  }, []);
+};
 module.exports = {
   getMemberList,
   getActiveMembers,
   getMemberByGender,
+  getMembersById,
 };
