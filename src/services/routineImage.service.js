@@ -31,8 +31,8 @@ const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
 };
 
 // Positions based on image
-const statingX = 160;
-const startingY = 1051;
+const statingX = 120;
+const startingY = 1055;
 const gapBetweenColum = 371;
 const gapBetweenRow = 171;
 const gapBetweenNameAndID = 55;
@@ -40,7 +40,7 @@ const gapBetweenNameAndID = 55;
 const getPositionInImage = (row, colum) => {
   const nameX = statingX + gapBetweenColum * colum;
   const nameY = startingY + gapBetweenRow * row;
-  const idX = nameX + 5;
+  const idX = nameX;
   const idY = nameY + gapBetweenNameAndID;
   return { nameX, nameY, idX, idY };
 };
@@ -106,10 +106,10 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
     );
 
     // Printing routine heading
-    image.print(headingBoldFont, 155, 662, "Starts:");
+    image.print(headingBoldFont, 183, 662, "Starts:");
     image.print(
       headingFont,
-      390,
+      415,
       662,
       nextSundayDate().toLocaleDateString("en-US", {
         day: "2-digit",
@@ -118,14 +118,34 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
       })
     );
 
-    image.print(headingBoldFont, 1088, 662, "Entry:");
-    image.print(headingFont, 1306, 662, "7:00 AM");
+    image.print(headingBoldFont, 1349, 662, "Entry:");
+    image.print(headingFont, 1575, 662, "7:00 AM");
 
     // Printing routine data
     DAYS.map((day) => {
       routineWithTextPositions[day].map((member) => {
-        image.print(bodyFont, member.nameX, member.nameY, member.name);
-        image.print(bodyFont, member.idX, member.idY, member.id);
+        image.print(
+          bodyFont,
+          member.nameX,
+          member.nameY,
+          {
+            text: member.name,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+          },
+          355,
+          165
+        );
+        image.print(
+          bodyFont,
+          member.idX,
+          member.idY,
+          {
+            text: member.id,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+          },
+          355,
+          165
+        );
       });
     });
 
