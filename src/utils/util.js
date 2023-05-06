@@ -16,4 +16,10 @@ const makeDirIfNotExists = (PATH) => {
     console.log(err);
   }
 };
-module.exports = { deleteFile, makeDirIfNotExists };
+
+function nextSundayDate() {
+  var today = new Date();
+  today.setDate(today.getDate() + ((0 - 1 - today.getDay() + 7) % 7) + 1);
+  return today;
+}
+module.exports = { deleteFile, makeDirIfNotExists, nextSundayDate };

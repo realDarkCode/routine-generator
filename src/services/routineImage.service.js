@@ -1,6 +1,7 @@
 const Jimp = require("jimp");
 const path = require("path");
 const routineConfig = require("../config/routine.json");
+const { nextSundayDate } = require("../utils/util");
 const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
   const _routine = [...routine];
@@ -20,7 +21,7 @@ const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
         positions = getPositionInImage(dayIndex, memberIndex);
       }
       store[currentDay][memberIndex] = {
-        name: member[0],
+        name: member[0].toUpperCase(),
         id: `${member[2].charAt(0)}-${member[1]}`,
         ...positions,
       };
@@ -30,16 +31,16 @@ const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
 };
 
 // Positions based on image
-const statingX = 240;
-const startingY = 960;
-const gapBetweenColum = 498;
-const gapBetweenRow = 308;
-const gapBetweenNameAndID = 70;
+const statingX = 120;
+const startingY = 1055;
+const gapBetweenColum = 371;
+const gapBetweenRow = 171;
+const gapBetweenNameAndID = 55;
 
 const getPositionInImage = (row, colum) => {
   const nameX = statingX + gapBetweenColum * colum;
   const nameY = startingY + gapBetweenRow * row;
-  const idX = nameX - 3;
+  const idX = nameX;
   const idY = nameY + gapBetweenNameAndID;
   return { nameX, nameY, idX, idY };
 };
@@ -93,23 +94,61 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
     );
 
     const image = await Jimp.read(TEMPLATE_IMAGE_PATH);
-    const font = await Jimp.loadFont(Jimp.FONT_SANS_64_BLACK);
-    const waterMarkFont = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
+    const bodyFont = await Jimp.loadFont(
+      path.join(__dirname, `../fonts/MONTSERRAT_52_MEDIUM.fnt`)
+    );
+    const headingFont = await Jimp.loadFont(
+      path.join(__dirname, `../fonts/MONTSERRAT_64_MEDIUM.fnt`)
+    );
+
+    const headingBoldFont = await Jimp.loadFont(
+      path.join(__dirname, `../fonts/MONTSERRAT_64_BOLD.fnt`)
+    );
+
+    // Printing routine heading
+    image.print(headingBoldFont, 183, 662, "Starts:");
+    image.print(
+      headingFont,
+      415,
+      662,
+      nextSundayDate().toLocaleDateString("en-US", {
+        day: "2-digit",
+        year: "numeric",
+        month: "short",
+      })
+    );
+
+    image.print(headingBoldFont, 1349, 662, "Entry:");
+    image.print(headingFont, 1575, 662, "7:00 AM");
+
+    // Printing routine data
     DAYS.map((day) => {
       routineWithTextPositions[day].map((member) => {
-        image.print(font, member.nameX, member.nameY, member.name);
-        image.print(font, member.idX, member.idY, member.id);
+        image.print(
+          bodyFont,
+          member.nameX,
+          member.nameY,
+          {
+            text: member.name,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+          },
+          355,
+          165
+        );
+        image.print(
+          bodyFont,
+          member.idX,
+          member.idY,
+          {
+            text: member.id,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+          },
+          355,
+          165
+        );
       });
     });
 
-    if (_options?.watermark) {
-      image.print(
-        waterMarkFont,
-        395,
-        465,
-        "generated with realDarkCode/routine-generator"
-      );
-    }
     await image.writeAsync(GENERATED_IMAGE_PATH);
     return GENERATED_IMAGE_PATH;
   } catch (error) {
