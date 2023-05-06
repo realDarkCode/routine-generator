@@ -1,6 +1,7 @@
 const Jimp = require("jimp");
 const path = require("path");
 const routineConfig = require("../config/routine.json");
+const { nextSundayDate } = require("../utils/util");
 const formatRoutine = (routine, memberPerDay = 6, landscape = true) => {
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday"];
   const _routine = [...routine];
@@ -93,26 +94,41 @@ const generateImage = async (routine, routineNumber = 1, options = {}) => {
     );
 
     const image = await Jimp.read(TEMPLATE_IMAGE_PATH);
-    // const font = await Jimp.loadFont(Jimp.FONT_SANS_64_BLACK);
-    const font = await Jimp.loadFont(
+    const bodyFont = await Jimp.loadFont(
       path.join(__dirname, `../fonts/MONTSERRAT_52_MEDIUM.fnt`)
     );
-    const waterMarkFont = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
+    const headingFont = await Jimp.loadFont(
+      path.join(__dirname, `../fonts/MONTSERRAT_64_MEDIUM.fnt`)
+    );
+
+    const headingBoldFont = await Jimp.loadFont(
+      path.join(__dirname, `../fonts/MONTSERRAT_64_BOLD.fnt`)
+    );
+
+    // Printing routine heading
+    image.print(headingBoldFont, 155, 662, "Starts:");
+    image.print(
+      headingFont,
+      390,
+      662,
+      nextSundayDate().toLocaleDateString("en-US", {
+        day: "2-digit",
+        year: "numeric",
+        month: "short",
+      })
+    );
+
+    image.print(headingBoldFont, 1088, 662, "Entry:");
+    image.print(headingFont, 1306, 662, "7:00 AM");
+
+    // Printing routine data
     DAYS.map((day) => {
       routineWithTextPositions[day].map((member) => {
-        image.print(font, member.nameX, member.nameY, member.name);
-        image.print(font, member.idX, member.idY, member.id);
+        image.print(bodyFont, member.nameX, member.nameY, member.name);
+        image.print(bodyFont, member.idX, member.idY, member.id);
       });
     });
 
-    if (_options?.watermark) {
-      image.print(
-        waterMarkFont,
-        395,
-        465,
-        "generated with realDarkCode/routine-generator"
-      );
-    }
     await image.writeAsync(GENERATED_IMAGE_PATH);
     return GENERATED_IMAGE_PATH;
   } catch (error) {
